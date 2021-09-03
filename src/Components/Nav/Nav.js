@@ -1,9 +1,13 @@
-import React, { Component } from 'react';
+import React, { Component, useReducer } from 'react';
 import axios from 'axios';
 import homeLogo from './../../assets/home_logo.png';
 import newLogo from './../../assets/new_logo.png';
 import logoutLogo from './../../assets/shut_down.png';
 import './Nav.css';
+import {Link, withRouter} from 'react-router-dom';
+import {connect} from 'react-redux';
+import { updateUser } from '../../redux/reducer';
+import { logout } from '../../redux/reducer';
 
 class Nav extends Component {
   constructor(props) {
@@ -28,19 +32,23 @@ class Nav extends Component {
   }
   
   render() {
+    const {username} = this.props.user
+    console.log(this.props)
       return this.props.location.pathname !== '/' &&
         <div className='nav'>
-          <div className='nav-profile-container'>
+          <div className='nav-profile-container' style={{backgroundImage= url('${REDUX_STATE_PIC}')}}>
             <div className='nav-profile-pic'></div>
-            <p>placeholder username</p>
+            <p>{username}</p>
           </div>
           <div className='nav-links'>
-            <img className='nav-img' src={homeLogo} alt='home' />
-            <img className='nav-img' src={newLogo} alt='new post' />
+            <Link to='/Dash'><img className='nav-img' src={homeLogo} alt='home' /></Link>
+            <Link to='/Form'><img className='nav-img' src={newLogo} alt='new post' /></Link>
           </div>
-          <img className='nav-img logout' src={logoutLogo} alt='logout' />
+          <Link to='/Auth' onClick={this.logout}><img className='nav-img logout' src={logoutLogo} alt='logout' /></Link>
         </div>
   }
 }
-
-export default Nav;
+function mapStateToProps(state){
+  return state;
+};
+export default withRouter(connect(mapStateToProps, {updateUser, logout})(Nav));
